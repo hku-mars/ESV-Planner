@@ -1,0 +1,130 @@
+enableSimulation:             true
+
+
+inputdata:                    "shapes/sdDemo.obj" 
+
+poly_params:                   [0.0,0.0,0.0]  #set the initial x,y and yaw value of the robot
+threads_num:                30
+momentum:                   0.0 
+
+eps:                            0.3
+ 
+
+
+testRate:                     100.0
+ts:                           2.0 
+
+vehicleMass:                0.61
+gravAcc:                    9.8
+horizDrag:                  0.10
+vertDrag:                   0.10
+parasDrag:                  0.01
+speedEps:                   0.0001
+
+
+
+inflation_size:               0
+occupancy_resolution:      0.1
+debug_output:              false #bool
+sta_threshold:             1 #int
+# kernel_size*occupancy_resolution
+#机器人的尺寸需要占几个格子，这个参数是奇数，因为机器人的bounding box是一个正方形，所以这个参数是一个边长
+kernel_size:  21   # 必须为奇数，一个robot kernel的bounding boxsize，乘以地图分辨率occupancy_resolution为机器人kernel各轴的长度
+kernel_yaw_num:   20   # 必须为偶数
+front_end_safeh:  0.0
+
+# ======= trajectory planners ======= #
+
+# Shared trajectory initialization and optimizer debugging
+inittime:                  2.5     # Initial duration per polynomial piece.
+enableearlyExit:            true   # Per-iteration debug drawing/pause; not convergence control.
+debugpause:                 1       # Debug pause in milliseconds.
+
+# R2 planner: objective weights and soft motion limits
+rho_mid_end:               2       # Trajectory duration weight.
+weight_pr:                 20.0    # Reference waypoint position penalty.
+weight_ar:                 0.0     # Reference acceleration/attitude penalty.
+vmax:                      10      # Current R2 code uses the full 3-channel velocity norm.
+weight_v:                  10.0    # Velocity-limit penalty.
+omgmax:                    10      # Angular-speed limit from the current flatness model.
+weight_omg:                10.0    # Angular-speed-limit penalty.
+
+# R2 planner: penalty integration and smoothing
+# Also loaded by SE2, but unused in its active swept-volume objective.
+smoothingEps:              1.0e-2
+integralIntervs:           6
+
+# R2 planner: LBFGS convergence
+mem_size:                  16
+past:                      64
+min_step:                  1.0e-32 # Minimum line-search step.
+g_epsilon:                 0.0     # Gradient convergence tolerance; zero disables this test.
+relCostTolMidEnd:          1.0e-10 # Relative cost-change tolerance.
+
+# SE2 planner: swept-volume collision repair objective
+rho:                       1.0     # Trajectory duration weight.
+weight_p:                  100.0    # Swept-volume collision penalty.
+safety_hor:                0.1     # Desired clearance used by the collision penalty.
+
+# SE2 planner: LMBM cost-change convergence
+se2_past:                  10      # Consecutive small cost changes before stopping.
+se2_delta_past:            1.0e-1  # Absolute cost-change tolerance.
+# SE2 early termination, checked every LMBM iteration (0 disables a check).
+# The result is still validated by trajSafe, so stopping early never accepts
+# an unsafe trajectory; it only bounds the time spent on hopeless solves.
+se2_max_iter:              150     # Iteration cap per solve.
+se2_max_time:              3.0     # Wall-clock budget per solve, seconds.
+se2_stuck_window:          20      # Stop when the trajectory still intrudes into
+se2_stuck_violation:       0.01    # the safety band by more than this (metres,
+se2_stuck_rel_tol:         1.0e-2  # summed) and that fell < this fraction over the window.
+
+# Legacy SE2 settings: loaded, but unused by the active objective
+weight_a:                  10.0
+thetamax:                  100.0
+weight_theta:              10.0
+
+# Planner strategy: final trajectory safety check, separate from optimization
+safety_hor_fastCheck:       0.05     # Added to half the map resolution for the check threshold.
+
+# ======= topo search ======= #
+# Topo sampling rectangle: world axis aligned, centred on the midpoint of
+# start and goal. The box always spans the start/goal bounding box; these are
+# the MARGINS added beyond it on each side, so the region measures
+# (|dx| + 2*margin_x) by (|dy| + 2*margin_y) metres and always contains both
+# endpoints. Drawn on /planning_vis/sample_region.
+topo_prm_sample_margin_x:  4.0
+topo_prm_sample_margin_y:  4.0
+# Absolute size of the same rectangle, in metres, as a full width/height. A
+# positive value replaces the margin on that axis, so the region measures
+# exactly width_x by width_y regardless of how far apart start and goal are.
+# It is still widened when the start/goal span would not fit, which keeps both
+# endpoints inside. 0 falls back to the margins above.
+topo_prm_sample_width_x:  10.0
+topo_prm_sample_width_y:  10
+topo_prm_reserve_num:  6
+topo_prm_ratio_to_short:  6.0
+topo_prm_max_sample_num:  20000
+topo_prm_max_sample_time:  3.0
+topo_prm_max_raw_path:  10
+topo_prm_max_raw_path2:  3
+topo_prm_test_mode:  false
+topo_prm_iterator_num:  2
+# Extra distance in metres that a pushed path point is moved past the first
+# collision-free candidate, used by both the fast-check repair and the topo
+# shortcut. Applied only while every extra step still validates, so tight
+# corridors keep the minimum push. 0 restores the old hug-the-obstacle result.
+push_extra_dist:  0.4
+
+# ======= occupancy grid map ======= #
+# the map center is in the left-bottom corner of the map
+robot_inner_radius: 1.0
+# mapSize_x: 50
+# mapSize_y: 50
+mapSize_x: 200
+mapSize_y: 200
+mapSize_z: 2
+
+
+# ======= planner strategy ======= #
+segmentTolerance: 5  # Every high-risk point stamps on itself plus segmentTolerance neighbours on each side as high-risk regions.
+min_free_segmentPoints: 5  # when the number of free points in a segment is less than this value, the segment is absorbed into neighbouring high-risk regions.

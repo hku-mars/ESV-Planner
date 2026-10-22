@@ -1,0 +1,45 @@
+<launch>
+
+<arg name="rviz" default="true"/>
+<arg name="foxglove" default="false"/>
+
+<node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map_broadcaster" 
+      args="0 0 0 0 0 0 world map" />
+
+
+
+<arg name="start_x" default="5.0"/>
+<arg name="start_y" default="0.1"/>
+<arg name="map_resolution" default="0.2"/>
+
+ <node pkg="grid_path_searcher" type="demo_node" name="demo_node" output="screen" required = "true"> 
+        <rosparam file="$(find grid_path_searcher)/config/demo2.yaml" command="load" />
+        <remap from="waypoints"       to="/waypoint_generator/waypoints"/>
+        <remap from="globalmap"             to="/globalmap"/> 
+
+
+        <param name="planning/start_x" value="$(arg start_x)"/>
+        <param name="planning/start_y" value="$(arg start_y)"/>
+      
+ </node>
+  
+  <include file="$(find pcd_reader)/launch/demo2.launch" >  </include>
+
+  <node pkg="waypoint_generator" name="waypoint_generator" type="waypoint_generator" output="screen">
+      <remap from="~goal" to="/goal"/>
+      <param name="waypoint_type" value="manual-lonely-waypoint"/>    
+  </node>
+
+  <!-- Visualisation: RViz by default; its 2D Nav Goal tool publishes the goal
+       on /goal. foxglove:=true additionally starts foxglove_bridge (install
+       ros-noetic-foxglove-bridge first). -->
+  <include if="$(arg foxglove)" file="$(find foxglove_bridge)/launch/foxglove_bridge.launch">
+      <arg name="port" value="8765"/>
+      <arg name="address" value="0.0.0.0"/>
+      <arg name="send_buffer_limit" value="999999999"/>
+  </include>
+
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find grid_path_searcher)/launch/rviz_config/demo.rviz"/>
+
+</launch>

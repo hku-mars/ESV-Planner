@@ -1,0 +1,14 @@
+<launch>
+    <!-- Node to read and publish a PCD file as a point cloud -->
+    <node name="pcd_reader_node" pkg="pcd_reader" type="pcd_reader_node" output="screen">
+        <!-- Example of passing arguments, if needed -->
+        <!-- <param name="some_param" value="some_value"/> -->
+        <!-- <param name="pcd_file_path" value="$(find pcd_reader)/data/input.pcd"/> -->
+        <param name="globalPCFilterThresUpper" type="double" value="0.5" />
+        <param name="globalPCFilterThresLower" type="double" value="0.0" />
+
+        <param name="pcd_path" type="string" value="$(find pcd_reader)/pcd_release/map1.pcd" />
+        <!-- downSampleRadius should be 0.08 -->
+        <!-- <param name="pcd_path" type="string" value="$(find pcd_reader)/pcd_release/test_tunnel.pcd" /> -->
+    </node>
+</launch>

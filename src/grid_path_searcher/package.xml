@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<package>
+  <name>grid_path_searcher</name>
+  <version>0.0.1</version>
+  <description> Path searching methods on 3d grid map </description>
+  <maintainer email="ustfeigao@gmail.com">fgaoaa</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>planner_algorithm</build_depend>
+  <build_depend>utils</build_depend>
+  <build_depend>fast_svsdf</build_depend>
+  <build_depend>traj_utils</build_depend>
+
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>tf2_ros</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>planner_algorithm</run_depend>
+  <run_depend>utils</run_depend>
+  <run_depend>fast_svsdf</run_depend>
+  <run_depend>traj_utils</run_depend>
+  <!-- demo launch files visualise in RViz (foxglove_bridge is optional) -->
+  <run_depend>rviz</run_depend>
+
+
+  <!-- <build_export_depend>mid_end</build_export_depend>
+  <build_export_depend>utils</build_export_depend> -->
+
+
+
+
+  <export>
+
+  </export>
+</package>

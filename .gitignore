@@ -1,0 +1,18 @@
+/devel/
+/install/
+/build/
+/map_manager/
+/src/grid_path_searcher/debug.txt
+/.clangd
+/.cache/
+/.claude/
+
+# paper sources and original maps (kept locally, not released)
+/Paper Figure.zip
+/src/pcd_reader/pcd_original/
+
+# editor / tooling leftovers
+/.vscode/
+/.clangd_fallback/
+*~
+*.pyc
